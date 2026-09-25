@@ -4,6 +4,7 @@ using UnityEngine.InputSystem;
 public class PlayerController : MonoBehaviour
 {
     public float moveSpeed = 4f;
+    public float lookSpeed = 4f;
     public Camera camera;
     private InputAction m_move;
     private InputAction m_look;
@@ -36,7 +37,7 @@ public class PlayerController : MonoBehaviour
 
         if (m_jump.WasPressedThisFrame())
         {
-            Jump();   
+            Jump();
         }
 
         if (m_attack.WasPressedThisFrame())
@@ -57,27 +58,26 @@ public class PlayerController : MonoBehaviour
 
     private void Dash()
     {
-
     }
 
     private void Crouch()
     {
-
     }
     private void Attack()
     {
-
     }
     private void Jump()
     {
-
     }
     private void Moving()
     {
-        transform.Translate((Vector3.forward * m_moveVal.y + Vector3.right * m_moveVal.x) * moveSpeed * Time.deltaTime);
+        transform.position += transform.rotation * new Vector3(m_moveVal.x, 0, m_moveVal.y) * moveSpeed * Time.deltaTime;
     }
     private void Rotating()
     {
-
+        float rotationYAmount = m_lookVal.x * lookSpeed * Time.deltaTime;
+        float rotationXAmount = -1 * m_lookVal.y * lookSpeed * Time.deltaTime;
+        transform.localEulerAngles += new Vector3(0, rotationYAmount, 0);
+        camera.transform.localEulerAngles += new Vector3(rotationXAmount, 0, 0);
     }
 }
