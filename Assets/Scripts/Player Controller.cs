@@ -5,6 +5,7 @@ public class PlayerController : MonoBehaviour
 {
     public float moveSpeed = 4f;
     public float lookSpeed = 4f;
+    public float jumpStrength = 4f;
     public Camera camera;
     private InputAction m_move;
     private InputAction m_look;
