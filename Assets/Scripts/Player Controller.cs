@@ -52,7 +52,7 @@ public class PlayerController : MonoBehaviour
         Moving();
         Rotating();
 
-        if (m_jump.WasPressedThisFrame())
+        if (m_jump.WasPressedThisFrame() && m_isGrounded)
         {
             Jump();
         }
@@ -71,6 +71,18 @@ public class PlayerController : MonoBehaviour
         {
             ToggleCrouch();
         }
+
+        Debug.Log(m_isGrounded);
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        m_isGrounded = Physics.Raycast(transform.position, -Vector3.up, m_collider.height / 2 + 0.1f);
+    }
+
+    private void OnCollisionExit(Collision collision)
+    {
+        m_isGrounded = Physics.Raycast(transform.position, -Vector3.up, m_collider.height / 2 + 0.1f);
     }
 
     private void Dash()
