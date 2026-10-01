@@ -8,6 +8,8 @@ public class PlayerController : MonoBehaviour
     public float lookSpeed = 4f;
     public float jumpStrength = 4f;
     public float crouchHeight = 0.6f;
+    public float attackDist = 10f;
+    public GameObject attackObject;
     public Camera camera;
     private CameraController m_cameraController;
     private InputAction m_move;
@@ -22,6 +24,7 @@ public class PlayerController : MonoBehaviour
     private CapsuleCollider m_collider;
     private bool m_isGrounded;
     private bool m_isCrouching = false;
+    private bool m_isAttacking = false;
     private float m_colliderCrouchDist;
     private float m_cameraCrouchDist;
 
@@ -57,7 +60,7 @@ public class PlayerController : MonoBehaviour
             Jump();
         }
 
-        if (m_attack.WasPressedThisFrame())
+        if (m_attack.WasPressedThisFrame() && !m_isAttacking)
         {
             Attack();
         }
@@ -71,8 +74,6 @@ public class PlayerController : MonoBehaviour
         {
             ToggleCrouch();
         }
-
-        Debug.Log(m_isGrounded);
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -107,6 +108,19 @@ public class PlayerController : MonoBehaviour
     }
     private void Attack()
     {
+        Debug.Log("Attacking...");
+        m_isAttacking = true;
+        AttackController attackController =
+            Instantiate(attackObject, camera.transform.position + camera.transform.forward * attackDist,
+                        camera.transform.rotation, camera.transform)
+                .GetComponent<AttackController>();
+        attackController.doneEvent.AddListener(OnAttackDone);
+    }
+
+    private void OnAttackDone()
+    {
+        m_isAttacking = false;
+        Debug.Log("Done Attacking!");
     }
     private void Jump()
     {
@@ -125,5 +139,7 @@ public class PlayerController : MonoBehaviour
         float rotationXAmount = -1 * m_lookVal.y * lookSpeed * Time.deltaTime;
         transform.localEulerAngles += new Vector3(0, rotationYAmount, 0);
         camera.transform.localEulerAngles += new Vector3(rotationXAmount, 0, 0);
+
+        Debug.DrawRay(transform.position, camera.transform.rotation * Vector3.forward);
     }
 }
