@@ -9,6 +9,7 @@ public class PlayerController : MonoBehaviour
     public float jumpStrength = 4f;
     public float crouchHeight = 0.6f;
     public float attackDist = 10f;
+    public float lungeForce = 10f;
     public GameObject attackObject;
     public Camera camera;
     private CameraController m_cameraController;
@@ -110,6 +111,7 @@ public class PlayerController : MonoBehaviour
     {
         Debug.Log("Attacking...");
         m_isAttacking = true;
+        Lunge();
         AttackController attackController =
             Instantiate(attackObject, camera.transform.position + camera.transform.forward * attackDist,
                         camera.transform.rotation, camera.transform)
@@ -117,6 +119,10 @@ public class PlayerController : MonoBehaviour
         attackController.doneEvent.AddListener(OnAttackDone);
     }
 
+    private void Lunge()
+    {
+        m_rigidBody.linearVelocity = (camera.transform.forward * lungeForce + camera.transform.up * lungeForce / 2);
+    }
     private void OnAttackDone()
     {
         m_isAttacking = false;
