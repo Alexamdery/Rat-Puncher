@@ -10,6 +10,9 @@ public class PlayerController : MonoBehaviour
     public float crouchHeight = 0.6f;
     public float attackDist = 10f;
     public float lungeForce = 10f;
+    public float airControl = 0.5f;
+    public float airControlThreshold = 10f;
+    public float groundFriction = 1.0f;
     public GameObject attackObject;
     public Camera camera;
     private CameraController m_cameraController;
@@ -53,7 +56,6 @@ public class PlayerController : MonoBehaviour
         m_moveVal = m_move.ReadValue<Vector2>();
         m_lookVal = m_look.ReadValue<Vector2>();
 
-        Moving();
         Rotating();
 
         if (m_jump.WasPressedThisFrame() && m_isGrounded)
@@ -75,6 +77,11 @@ public class PlayerController : MonoBehaviour
         {
             ToggleCrouch();
         }
+    }
+
+    private void FixedUpdate()
+    {
+        Moving();
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -130,11 +137,29 @@ public class PlayerController : MonoBehaviour
     }
     private void Jump()
     {
-        m_rigidBody.linearVelocity = new Vector3(0, jumpStrength, 0);
+        m_rigidBody.linearVelocity =
+            new Vector3(m_rigidBody.linearVelocity.x, jumpStrength, m_rigidBody.linearVelocity.z);
     }
     private void Moving()
     {
-        transform.position += transform.rotation * new Vector3(m_moveVal.x, 0, m_moveVal.y) * moveSpeed *Time.deltaTime;
+        Vector3 xyVelocity = Vector3.Scale(m_rigidBody.linearVelocity, new Vector3(1, 0, 1));
+        Vector3 input = new Vector3(m_moveVal.x, 0, m_moveVal.y);
+        Debug.Log(Mathf.Abs(Vector3.SignedAngle(xyVelocity, input, Vector3.up)));
+        if (m_isGrounded)
+        {
+            m_rigidBody.AddForce(transform.rotation * input *
+                                     moveSpeed *Time.deltaTime,
+                                 ForceMode.VelocityChange);
+
+            m_rigidBody.AddForce(-xyVelocity * groundFriction);
+        }
+        else if (Mathf.Abs(Vector3.SignedAngle(xyVelocity,input,Vector3.up)) >= 90)
+        {
+            // Only allow input if it's in the opposite direction (outside of a 180 deg range)
+            m_rigidBody.AddForce(transform.rotation * input * moveSpeed *
+                                     airControl * Time.deltaTime,
+                                 ForceMode.VelocityChange);
+        }
     }
     private void Rotating()
     {
@@ -145,7 +170,5 @@ public class PlayerController : MonoBehaviour
         float rotationXAmount = -1 * m_lookVal.y * lookSpeed * Time.deltaTime;
         transform.localEulerAngles += new Vector3(0, rotationYAmount, 0);
         camera.transform.localEulerAngles += new Vector3(rotationXAmount, 0, 0);
-
-        Debug.DrawRay(transform.position, camera.transform.rotation * Vector3.forward);
     }
 }
