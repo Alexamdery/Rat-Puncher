@@ -32,6 +32,7 @@ public class PlayerController : MonoBehaviour
     private bool m_jumpPressed = false;
     private bool m_attackPressed = false;
     private bool m_attackReleased = false;
+    private bool m_hasAttacked = false;
     private float m_colliderCrouchDist;
     private float m_cameraCrouchDist;
 
@@ -90,12 +91,21 @@ public class PlayerController : MonoBehaviour
     private void FixedUpdate()
     {
         m_isGrounded = Physics.Raycast(transform.position, -Vector3.up, m_collider.height / 2 + 0.1f);
+        if (m_isGrounded)
+        {
+            m_hasAttacked = false;
+        }
 
         if (m_attackPressed)
         {
-            Lunge();
+            if (!m_hasAttacked)
+            {
+                // Can only lunge ONCE in air
+                Lunge();
+            }
             m_isAttacking = true;
             m_attackPressed = false;
+            m_hasAttacked = true;
         }
 
         if (m_attackReleased)
