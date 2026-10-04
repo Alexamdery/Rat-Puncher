@@ -29,6 +29,7 @@ public class PlayerController : MonoBehaviour
     private bool m_isGrounded;
     private bool m_isCrouching = false;
     private bool m_isAttacking = false;
+    private bool m_jumpPressed = false;
     private float m_colliderCrouchDist;
     private float m_cameraCrouchDist;
 
@@ -60,7 +61,7 @@ public class PlayerController : MonoBehaviour
 
         if (m_jump.WasPressedThisFrame() && m_isGrounded)
         {
-            Jump();
+            m_jumpPressed = true;
         }
 
         if (m_attack.WasPressedThisFrame() && !m_isAttacking)
@@ -81,18 +82,28 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        Moving();
+        m_isGrounded = Physics.Raycast(transform.position, -Vector3.up, m_collider.height / 2 + 0.1f);
+        if (m_jumpPressed)
+        {
+            Jump();
+            m_jumpPressed = false;
+        }
+        else
+        {
+
+            Moving();
+        }
     }
 
-    private void OnCollisionEnter(Collision collision)
-    {
-        m_isGrounded = Physics.Raycast(transform.position, -Vector3.up, m_collider.height / 2 + 0.1f);
-    }
+    //private void OnCollisionEnter(Collision collision)
+    //{
+    //    m_isGrounded = Physics.Raycast(transform.position, -Vector3.up, m_collider.height / 2 + 0.1f);
+    //}
 
-    private void OnCollisionExit(Collision collision)
-    {
-        m_isGrounded = Physics.Raycast(transform.position, -Vector3.up, m_collider.height / 2 + 0.1f);
-    }
+    //private void OnCollisionExit(Collision collision)
+    //{
+    //    m_isGrounded = Physics.Raycast(transform.position, -Vector3.up, m_collider.height / 2 + 0.1f);
+    //}
 
     private void Dash()
     {
@@ -147,17 +158,14 @@ public class PlayerController : MonoBehaviour
         Debug.Log(xzVelocity);
         if (m_isGrounded)
         {
-            m_rigidBody.AddForce(transform.rotation * input *
-                                     moveSpeed *Time.deltaTime,
-                                 ForceMode.VelocityChange);
+            m_rigidBody.AddForce(transform.rotation * input * moveSpeed * Time.deltaTime, ForceMode.VelocityChange);
 
             m_rigidBody.AddForce(-xzVelocity * groundFriction);
         }
         else if (Mathf.Abs(Vector3.SignedAngle(xzVelocity, transform.rotation * input, Vector3.up)) >= 90)
         {
             // Only allow input if it's in the opposite direction (outside of a 180 deg range)
-            m_rigidBody.AddForce(transform.rotation * input * moveSpeed *
-                                     airControl * Time.deltaTime,
+            m_rigidBody.AddForce(transform.rotation * input * moveSpeed * airControl * Time.deltaTime,
                                  ForceMode.VelocityChange);
         }
     }
