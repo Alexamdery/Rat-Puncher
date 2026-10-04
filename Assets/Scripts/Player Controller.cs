@@ -43,6 +43,8 @@ public class PlayerController : MonoBehaviour
         m_move = InputSystem.actions.FindAction("Move");
         m_look = InputSystem.actions.FindAction("Look");
         m_jump = InputSystem.actions.FindAction("Jump");
+        m_crouch = InputSystem.actions.FindAction("Crouch");
+        m_sprint = InputSystem.actions.FindAction("Sprint");
         m_attack = InputSystem.actions.FindAction("Attack");
         m_rigidBody = GetComponent<Rigidbody>();
         m_collider = GetComponent<CapsuleCollider>();
@@ -74,6 +76,16 @@ public class PlayerController : MonoBehaviour
         if (m_attack.WasReleasedThisFrame() && m_isLunging)
         {
             m_attackReleased = true;
+        }
+
+        if (m_sprint.WasPressedThisFrame())
+        {
+            Dash();
+        }
+
+        if (m_crouch.WasPressedThisFrame() || m_crouch.WasReleasedThisFrame())
+        {
+            ToggleCrouch();
         }
     }
 
@@ -110,6 +122,37 @@ public class PlayerController : MonoBehaviour
 
         Moving();
     }
+
+    // private void OnCollisionEnter(Collision collision)
+    //{
+    //     m_isGrounded = Physics.Raycast(transform.position, -Vector3.up, m_collider.height / 2 + 0.1f);
+    // }
+
+    // private void OnCollisionExit(Collision collision)
+    //{
+    //     m_isGrounded = Physics.Raycast(transform.position, -Vector3.up, m_collider.height / 2 + 0.1f);
+    // }
+
+    private void Dash()
+    {
+    }
+
+    private void ToggleCrouch()
+    {
+        if (m_isCrouching)
+        {
+            m_cameraController.MoveCameraY(m_cameraCrouchDist);
+            m_collider.center = new Vector3(0, 0, 0);
+            m_collider.height /= crouchHeight;
+        }
+        else
+        {
+            m_cameraController.MoveCameraY(-m_cameraCrouchDist);
+            m_collider.center -= new Vector3(0, m_colliderCrouchDist, 0);
+            m_collider.height *= crouchHeight;
+        }
+        m_isCrouching = !m_isCrouching;
+    }
     private void Attack()
     {
         m_isLunging = true;
@@ -127,7 +170,6 @@ public class PlayerController : MonoBehaviour
             Punchable punchable = punched.GetComponent<Punchable>();
             punchable.SetupPunch(camera.transform.forward);
             m_isAttacking = true;
-            // Enter Attacking State
         }
 
         m_isLunging = false;
