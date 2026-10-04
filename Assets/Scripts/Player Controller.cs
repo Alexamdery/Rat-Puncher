@@ -183,7 +183,6 @@ public class PlayerController : MonoBehaviour
     {
         Vector3 xzVelocity = Vector3.Scale(m_rigidBody.linearVelocity, new Vector3(1, 0, 1));
         Vector3 input = new Vector3(m_moveVal.x, 0, m_moveVal.y);
-        Debug.Log(xzVelocity);
         if (m_isGrounded)
         {
             m_rigidBody.AddForce(transform.rotation * input * moveSpeed * Time.deltaTime, ForceMode.VelocityChange);
