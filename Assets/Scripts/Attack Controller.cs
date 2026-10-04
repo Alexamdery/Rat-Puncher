@@ -23,4 +23,13 @@ public class AttackController : MonoBehaviour
             Destroy(gameObject);
         }
     }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        Punchable punchable = other.gameObject.GetComponent<Punchable>();
+        if (punchable != null)
+        {
+            punchable.SetupPunch(transform.forward);
+        }
+    }
 }
