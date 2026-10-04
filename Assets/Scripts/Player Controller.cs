@@ -142,18 +142,18 @@ public class PlayerController : MonoBehaviour
     }
     private void Moving()
     {
-        Vector3 xyVelocity = Vector3.Scale(m_rigidBody.linearVelocity, new Vector3(1, 0, 1));
+        Vector3 xzVelocity = Vector3.Scale(m_rigidBody.linearVelocity, new Vector3(1, 0, 1));
         Vector3 input = new Vector3(m_moveVal.x, 0, m_moveVal.y);
-        Debug.Log(Mathf.Abs(Vector3.SignedAngle(xyVelocity, input, Vector3.up)));
+        Debug.Log(xzVelocity);
         if (m_isGrounded)
         {
             m_rigidBody.AddForce(transform.rotation * input *
                                      moveSpeed *Time.deltaTime,
                                  ForceMode.VelocityChange);
 
-            m_rigidBody.AddForce(-xyVelocity * groundFriction);
+            m_rigidBody.AddForce(-xzVelocity * groundFriction);
         }
-        else if (Mathf.Abs(Vector3.SignedAngle(xyVelocity,input,Vector3.up)) >= 90)
+        else if (Mathf.Abs(Vector3.SignedAngle(xzVelocity, transform.rotation * input, Vector3.up)) >= 90)
         {
             // Only allow input if it's in the opposite direction (outside of a 180 deg range)
             m_rigidBody.AddForce(transform.rotation * input * moveSpeed *
