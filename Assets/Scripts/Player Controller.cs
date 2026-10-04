@@ -30,6 +30,8 @@ public class PlayerController : MonoBehaviour
     private bool m_isCrouching = false;
     private bool m_isAttacking = false;
     private bool m_jumpPressed = false;
+    private bool m_attackPressed = false;
+    private bool m_attackReleased = false;
     private float m_colliderCrouchDist;
     private float m_cameraCrouchDist;
 
@@ -66,7 +68,12 @@ public class PlayerController : MonoBehaviour
 
         if (m_attack.WasPressedThisFrame() && !m_isAttacking)
         {
-            Attack();
+            m_attackPressed = true;
+        }
+
+        if (m_attack.WasReleasedThisFrame() && m_isAttacking)
+        {
+            m_attackReleased = true;
         }
 
         if (m_sprint.WasPressedThisFrame())
@@ -83,6 +90,21 @@ public class PlayerController : MonoBehaviour
     private void FixedUpdate()
     {
         m_isGrounded = Physics.Raycast(transform.position, -Vector3.up, m_collider.height / 2 + 0.1f);
+
+        if (m_attackPressed)
+        {
+            Lunge();
+            m_isAttacking = true;
+            m_attackPressed = false;
+        }
+
+        if (m_attackReleased)
+        {
+            Attack();
+            m_isAttacking = false;
+            m_attackReleased = false;
+        }
+
         if (m_jumpPressed)
         {
             Jump();
@@ -90,20 +112,19 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-
             Moving();
         }
     }
 
-    //private void OnCollisionEnter(Collision collision)
+    // private void OnCollisionEnter(Collision collision)
     //{
-    //    m_isGrounded = Physics.Raycast(transform.position, -Vector3.up, m_collider.height / 2 + 0.1f);
-    //}
+    //     m_isGrounded = Physics.Raycast(transform.position, -Vector3.up, m_collider.height / 2 + 0.1f);
+    // }
 
-    //private void OnCollisionExit(Collision collision)
+    // private void OnCollisionExit(Collision collision)
     //{
-    //    m_isGrounded = Physics.Raycast(transform.position, -Vector3.up, m_collider.height / 2 + 0.1f);
-    //}
+    //     m_isGrounded = Physics.Raycast(transform.position, -Vector3.up, m_collider.height / 2 + 0.1f);
+    // }
 
     private void Dash()
     {
@@ -127,9 +148,7 @@ public class PlayerController : MonoBehaviour
     }
     private void Attack()
     {
-        Debug.Log("Attacking...");
         m_isAttacking = true;
-        Lunge();
         AttackController attackController =
             Instantiate(attackObject, camera.transform.position + camera.transform.forward * attackDist,
                         camera.transform.rotation, camera.transform)
@@ -144,7 +163,6 @@ public class PlayerController : MonoBehaviour
     private void OnAttackDone()
     {
         m_isAttacking = false;
-        Debug.Log("Done Attacking!");
     }
     private void Jump()
     {
