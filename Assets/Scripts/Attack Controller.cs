@@ -4,13 +4,13 @@ using UnityEngine.Events;
 public class AttackController : MonoBehaviour
 {
     public float attackDuration;
-    public UnityEvent doneEvent;
+    public UnityEvent<GameObject> doneEvent;
     private float m_timer = 0;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         if (doneEvent == null)
-            doneEvent = new UnityEvent();
+            doneEvent = new UnityEvent<GameObject>();
     }
 
     // Update is called once per frame
@@ -19,17 +19,15 @@ public class AttackController : MonoBehaviour
         m_timer += Time.deltaTime;
         if (m_timer >= attackDuration)
         {
-            doneEvent.Invoke();
+            doneEvent.Invoke(null);
             Destroy(gameObject);
         }
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        Punchable punchable = other.gameObject.GetComponent<Punchable>();
-        if (punchable != null)
-        {
-            punchable.SetupPunch(transform.forward);
-        }
+        // Should only be able to punch PUNCHABLE layer
+        doneEvent.Invoke(other.gameObject);
+        Destroy(gameObject);
     }
 }

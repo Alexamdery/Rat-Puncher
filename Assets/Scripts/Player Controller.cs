@@ -28,6 +28,7 @@ public class PlayerController : MonoBehaviour
     private CapsuleCollider m_collider;
     private bool m_isGrounded;
     private bool m_isCrouching = false;
+    private bool m_isLunging = false;
     private bool m_isAttacking = false;
     private bool m_jumpPressed = false;
     private bool m_attackPressed = false;
@@ -42,8 +43,6 @@ public class PlayerController : MonoBehaviour
         m_move = InputSystem.actions.FindAction("Move");
         m_look = InputSystem.actions.FindAction("Look");
         m_jump = InputSystem.actions.FindAction("Jump");
-        m_crouch = InputSystem.actions.FindAction("Crouch");
-        m_sprint = InputSystem.actions.FindAction("Sprint");
         m_attack = InputSystem.actions.FindAction("Attack");
         m_rigidBody = GetComponent<Rigidbody>();
         m_collider = GetComponent<CapsuleCollider>();
@@ -67,24 +66,14 @@ public class PlayerController : MonoBehaviour
             m_jumpPressed = true;
         }
 
-        if (m_attack.WasPressedThisFrame() && !m_isAttacking)
+        if (m_attack.WasPressedThisFrame() && !m_isLunging)
         {
             m_attackPressed = true;
         }
 
-        if (m_attack.WasReleasedThisFrame() && m_isAttacking)
+        if (m_attack.WasReleasedThisFrame() && m_isLunging)
         {
             m_attackReleased = true;
-        }
-
-        if (m_sprint.WasPressedThisFrame())
-        {
-            Dash();
-        }
-
-        if (m_crouch.WasPressedThisFrame() || m_crouch.WasReleasedThisFrame())
-        {
-            ToggleCrouch();
         }
     }
 
@@ -103,7 +92,6 @@ public class PlayerController : MonoBehaviour
                 // Can only lunge ONCE in air
                 Lunge();
             }
-            m_isAttacking = true;
             m_attackPressed = false;
             m_hasAttacked = true;
         }
@@ -111,7 +99,6 @@ public class PlayerController : MonoBehaviour
         if (m_attackReleased)
         {
             Attack();
-            m_isAttacking = false;
             m_attackReleased = false;
         }
 
@@ -120,59 +107,36 @@ public class PlayerController : MonoBehaviour
             Jump();
             m_jumpPressed = false;
         }
-        else
-        {
-            Moving();
-        }
-    }
 
-    // private void OnCollisionEnter(Collision collision)
-    //{
-    //     m_isGrounded = Physics.Raycast(transform.position, -Vector3.up, m_collider.height / 2 + 0.1f);
-    // }
-
-    // private void OnCollisionExit(Collision collision)
-    //{
-    //     m_isGrounded = Physics.Raycast(transform.position, -Vector3.up, m_collider.height / 2 + 0.1f);
-    // }
-
-    private void Dash()
-    {
-    }
-
-    private void ToggleCrouch()
-    {
-        if (m_isCrouching)
-        {
-            m_cameraController.MoveCameraY(m_cameraCrouchDist);
-            m_collider.center = new Vector3(0, 0, 0);
-            m_collider.height /= crouchHeight;
-        }
-        else
-        {
-            m_cameraController.MoveCameraY(-m_cameraCrouchDist);
-            m_collider.center -= new Vector3(0, m_colliderCrouchDist, 0);
-            m_collider.height *= crouchHeight;
-        }
-        m_isCrouching = !m_isCrouching;
+        Moving();
     }
     private void Attack()
     {
-        m_isAttacking = true;
+        m_isLunging = true;
         AttackController attackController =
             Instantiate(attackObject, camera.transform.position + camera.transform.forward * attackDist,
                         camera.transform.rotation, camera.transform)
                 .GetComponent<AttackController>();
-        attackController.doneEvent.AddListener(OnAttackDone);
+        attackController.doneEvent.AddListener(OnAttack);
+    }
+
+    private void OnAttack(GameObject punched)
+    {
+        if (punched != null)
+        {
+            Punchable punchable = punched.GetComponent<Punchable>();
+            punchable.SetupPunch(camera.transform.forward);
+            m_isAttacking = true;
+            // Enter Attacking State
+        }
+
+        m_isLunging = false;
     }
 
     private void Lunge()
     {
+        m_isLunging = true;
         m_rigidBody.linearVelocity = (camera.transform.forward * lungeForce + camera.transform.up * lungeForce / 2);
-    }
-    private void OnAttackDone()
-    {
-        m_isAttacking = false;
     }
     private void Jump()
     {
