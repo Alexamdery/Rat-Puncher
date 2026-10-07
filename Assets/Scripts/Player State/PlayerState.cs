@@ -75,17 +75,22 @@ public abstract class PlayerState
     {
         rigidBody.linearVelocity = cameraObject.transform.forward * attributes.lungeForce +
                                    cameraObject.transform.up * attributes.lungeForce / 2;
+        playerManager.hasLunged = true;
     }
 
     protected void Attack()
     {
-        AttackManager attackManager =
-            Object
-                .Instantiate(attributes.attackObject,
-                             cameraObject.transform.position + cameraObject.transform.forward * attributes.attackDist,
-                             cameraObject.transform.rotation, cameraObject.transform)
-                .GetComponent<AttackManager>();
-        attackManager.playerManager = playerManager;
+        if (playerManager.hasLunged)
+        {
+            Punch attackManager = Object
+                                              .Instantiate(attributes.attackObject,
+                                                           cameraObject.transform.position +
+                                                               cameraObject.transform.forward * attributes.attackDist,
+                                                           cameraObject.transform.rotation, cameraObject.transform)
+                                              .GetComponent<Punch>();
+            attackManager.playerManager = playerManager;
+        }
+        playerManager.hasLunged = false;
     }
 
     protected bool IsGrounded()

@@ -11,14 +11,14 @@ public class PlayerStatePunching : PlayerState
     }
     public override void OnStateEnter()
     {
-        rigidBody.Sleep();
+        rigidBody.isKinematic = true;
         _punchable = playerManager.punchedObject.GetComponent<Punchable>();
         _timer = 0;
     }
 
     public override void OnStateExit()
     {
-        rigidBody.WakeUp();
+        rigidBody.isKinematic = false;
     }
 
     public override void HandleAttackInput()

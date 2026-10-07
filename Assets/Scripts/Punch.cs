@@ -2,7 +2,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class AttackManager : MonoBehaviour
+public class Punch : MonoBehaviour
 {
     public float attackDuration;
     public PlayerManager playerManager;

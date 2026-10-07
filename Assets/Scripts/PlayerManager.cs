@@ -8,6 +8,7 @@ public class PlayerManager : MonoBehaviour
     public GameObject playerObject;
     public GameObject cameraObject;
     public GameObject punchedObject;
+    public bool hasLunged;
     private PlayerState _currentState;
     private Dictionary<PlayerStateIndex, PlayerState> _playerStates;
     private InputAction _move;
