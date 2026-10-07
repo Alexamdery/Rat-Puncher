@@ -6,17 +6,16 @@ public class Punch : MonoBehaviour
 {
     public float attackDuration;
     public PlayerManager playerManager;
-    private float m_timer = 0;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    private float _timer = 0;
+
     void Start()
     {
     }
 
-    // Update is called once per frame
     void Update()
     {
-        m_timer += Time.deltaTime;
-        if (m_timer >= attackDuration)
+        _timer += Time.deltaTime;
+        if (_timer >= attackDuration)
         {
             Destroy(gameObject);
         }
