@@ -79,12 +79,13 @@ public abstract class PlayerState
 
     protected void Attack()
     {
-        AttackController attackController =
+        AttackManager attackManager =
             Object
                 .Instantiate(attributes.attackObject,
                              cameraObject.transform.position + cameraObject.transform.forward * attributes.attackDist,
                              cameraObject.transform.rotation, cameraObject.transform)
-                .GetComponent<AttackController>();
+                .GetComponent<AttackManager>();
+        attackManager.playerManager = playerManager;
     }
 
     protected bool IsGrounded()

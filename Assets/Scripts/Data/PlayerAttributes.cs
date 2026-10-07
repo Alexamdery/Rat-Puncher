@@ -31,5 +31,6 @@ public class PlayerAttributes : ScriptableObject
     public float airControl = 0.5f;
     public float crouchControl = 0.5f;
     public float groundFriction = 1.0f;
+    public float punchTimer = 5.0f;
     public GameObject attackObject;
 }

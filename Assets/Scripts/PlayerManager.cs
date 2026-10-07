@@ -7,6 +7,7 @@ public class PlayerManager : MonoBehaviour
     public PlayerAttributes attributes;
     public GameObject playerObject;
     public GameObject cameraObject;
+    public GameObject punchedObject;
     private PlayerState _currentState;
     private Dictionary<PlayerStateIndex, PlayerState> _playerStates;
     private InputAction _move;
@@ -86,5 +87,11 @@ public class PlayerManager : MonoBehaviour
         _currentState.OnStateExit();
         _currentState = _playerStates[stateIndex];
         _currentState.OnStateEnter();
+    }
+
+    public void SetPunching(GameObject punchedObject)
+    {
+        this.punchedObject = punchedObject;
+        SetState(PlayerStateIndex.Punching);
     }
 }

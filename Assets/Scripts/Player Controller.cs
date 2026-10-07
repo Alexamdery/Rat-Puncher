@@ -149,11 +149,11 @@ public class PlayerControllerOld : MonoBehaviour
     private void Attack()
     {
         m_hasAttacked = true;
-        AttackController attackController =
+        AttackManager attackController =
             Instantiate(attackObject, camera.transform.position + camera.transform.forward * attackDist,
                         camera.transform.rotation, camera.transform)
-                .GetComponent<AttackController>();
-        attackController.doneEvent.AddListener(OnAttack);
+                .GetComponent<AttackManager>();
+        // attackController.doneEvent.AddListener(OnAttack);
         m_isLunging = false;
     }
 
