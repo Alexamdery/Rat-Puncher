@@ -2,16 +2,23 @@ using UnityEngine;
 
 public class PlayerStateAir : PlayerState
 {
+    private bool canLunge;
+    private bool canAttack;
     public PlayerStateAir(PlayerAttributes attributes, PlayerManager playerController)
         : base(attributes, playerController)
     {
+    }
+    public override void OnStateChange()
+    {
+        canLunge = true;
+        canAttack = true;
     }
 
     public override void Moving(Vector2 moveVal)
     {
         if (IsGrounded())
         {
-            playerController.SetState(PlayerStateIndex.Grounded);
+            playerManager.SetState(PlayerStateIndex.Grounded);
         }
 
         Vector3 input = new Vector3(moveVal.x, 0, moveVal.y);
@@ -26,8 +33,21 @@ public class PlayerStateAir : PlayerState
 
     public override void HandleLungeInput()
     {
-        base.HandleLungeInput();
-        canLunge = false;
+        if (canLunge)
+        {
+            base.HandleLungeInput();
+            canLunge = false;
+        }
+    }
+
+    public override void HandleAttackInput()
+    {
+        if (canAttack)
+        {
+            base.HandleAttackInput();
+            canLunge = false;
+            canAttack = false;
+        }
     }
     public override void HandleJumpInput()
     {

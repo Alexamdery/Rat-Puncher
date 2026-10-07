@@ -6,17 +6,20 @@ public class PlayerStateGrounded : PlayerState
         : base(attributes, playerController)
     {
     }
+    public override void OnStateChange()
+    {
+    }
 
     public override void Moving(Vector2 moveVal)
     {
         if (!IsGrounded())
         {
-            playerController.SetState(PlayerStateIndex.Air);
+            playerManager.SetState(PlayerStateIndex.Air);
         }
 
         base.Moving(moveVal);
         Vector3 xzVelocity = Vector3.Scale(rigidBody.linearVelocity, new Vector3(1, 0, 1));
         rigidBody.AddForce(-xzVelocity * attributes.groundFriction);
-        canLunge = true;
     }
+
 }

@@ -1,18 +1,18 @@
+using UnityEditor.Rendering;
 using UnityEngine;
 
 public abstract class PlayerState
 {
     protected PlayerAttributes attributes;
-    protected PlayerManager playerController;
+    protected PlayerManager playerManager;
     protected GameObject playerObject;
     protected GameObject cameraObject;
     protected Rigidbody rigidBody;
     protected CapsuleCollider collider;
-    protected bool canLunge = true;
     public PlayerState(PlayerAttributes attributes, PlayerManager playerController)
     {
         this.attributes = attributes;
-        this.playerController = playerController;
+        this.playerManager = playerController;
         playerObject = playerController.playerObject;
         cameraObject = playerController.cameraObject;
         rigidBody = playerObject.GetComponent<Rigidbody>();
@@ -25,6 +25,8 @@ public abstract class PlayerState
         this.playerObject = playerObject;
         this.cameraObject = cameraObject;
     }
+
+    public abstract void OnStateChange();
 
     public virtual void Moving(Vector2 moveVal)
     {
@@ -68,11 +70,8 @@ public abstract class PlayerState
 
     public virtual void HandleLungeInput()
     {
-        if (canLunge)
-        {
-            rigidBody.linearVelocity = cameraObject.transform.forward * attributes.lungeForce +
-                                       cameraObject.transform.up * attributes.lungeForce / 2;
-        }
+        rigidBody.linearVelocity = cameraObject.transform.forward * attributes.lungeForce +
+                                   cameraObject.transform.up * attributes.lungeForce / 2;
     }
     public virtual void HandleAttackInput()
     {
@@ -82,6 +81,15 @@ public abstract class PlayerState
                              cameraObject.transform.position + cameraObject.transform.forward * attributes.attackDist,
                              cameraObject.transform.rotation, cameraObject.transform)
                 .GetComponent<AttackController>();
+    }
+
+    public virtual void OnAttack(GameObject punched)
+    {
+        if (punched != null)
+        {
+            Punchable punchable = punched.GetComponent<Punchable>();
+            punchable.SetupPunch(cameraObject.transform.forward);
+        }
     }
 
     public virtual void HandleCrouchInput()

@@ -6,4 +6,9 @@ public class PlayerStatePunching : PlayerState
         : base(attributes, playerController)
     {
     }
+
+    public override void OnStateChange()
+    {
+        throw new System.NotImplementedException();
+    }
 }
