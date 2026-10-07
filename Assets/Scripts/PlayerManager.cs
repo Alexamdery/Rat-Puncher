@@ -82,6 +82,7 @@ public class PlayerManager : MonoBehaviour
     }
     public void SetState(PlayerStateIndex stateIndex)
     {
+        Debug.Log("State set: " + stateIndex);
         _currentState.OnStateExit();
         _currentState = _playerStates[stateIndex];
         _currentState.OnStateEnter();

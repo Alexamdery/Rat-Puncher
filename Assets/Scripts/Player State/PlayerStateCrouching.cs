@@ -18,6 +18,7 @@ public class PlayerStateCrouching : PlayerStateGrounded
         base.OnStateEnter();
         cameraObject.transform.position -= new Vector3(0, _cameraCrouchDist);
         collider.center -= new Vector3(0, _colliderCrouchDist, 0);
+        collider.height *= attributes.crouchHeight;
     }
 
     public override void OnStateExit()

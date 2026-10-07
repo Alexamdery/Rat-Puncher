@@ -89,6 +89,6 @@ public abstract class PlayerState
 
     protected bool IsGrounded()
     {
-        return Physics.Raycast(playerObject.transform.position, -Vector3.up, collider.height / 2 + 0.1f);
+        return Physics.Raycast(collider.transform.position + collider.center, -Vector3.up, collider.height / 2 + 0.1f);
     }
 }
