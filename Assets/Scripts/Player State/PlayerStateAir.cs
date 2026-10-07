@@ -1,17 +1,21 @@
 using UnityEngine;
 
-public class PlayerStateAir : PlayerState
+public class PlayerStateAir : PlayerStateNeutral
 {
-    private bool canLunge;
-    private bool canAttack;
+    protected bool canLunge;
+    protected bool canAttack;
     public PlayerStateAir(PlayerAttributes attributes, PlayerManager playerController)
         : base(attributes, playerController)
     {
     }
-    public override void OnStateChange()
+    public override void OnStateEnter()
     {
         canLunge = true;
         canAttack = true;
+    }
+    public override void OnStateExit()
+    {
+        // Do nothing
     }
 
     public override void Moving(Vector2 moveVal)
@@ -52,5 +56,15 @@ public class PlayerStateAir : PlayerState
     public override void HandleJumpInput()
     {
         return;
+    }
+
+    public override void HandleCrouchInput()
+    {
+        // TODO: groundpound
+    }
+
+    public override void HandleUncrouchInput()
+    {
+        // Do nothing
     }
 }

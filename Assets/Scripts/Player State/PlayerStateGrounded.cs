@@ -1,12 +1,9 @@
 using UnityEngine;
 
-public class PlayerStateGrounded : PlayerState
+public class PlayerStateGrounded : PlayerStateNeutral
 {
     public PlayerStateGrounded(PlayerAttributes attributes, PlayerManager playerController)
         : base(attributes, playerController)
-    {
-    }
-    public override void OnStateChange()
     {
     }
 
@@ -22,4 +19,9 @@ public class PlayerStateGrounded : PlayerState
         rigidBody.AddForce(-xzVelocity * attributes.groundFriction);
     }
 
+    public override void HandleCrouchInput()
+    {
+        base.HandleCrouchInput();
+        playerManager.SetState(PlayerStateIndex.Crouching);
+    }
 }

@@ -15,7 +15,8 @@ public enum PlayerStateIndex
 {
     Grounded,
     Air,
-    Punching
+    Punching,
+    Crouching
 }
 
 [CreateAssetMenu(fileName = "PlayerAttributes", menuName = "Scriptable Objects/PlayerAttributes")]
@@ -28,6 +29,7 @@ public class PlayerAttributes : ScriptableObject
     public float attackDist = 10f;
     public float lungeForce = 10f;
     public float airControl = 0.5f;
+    public float crouchControl = 0.5f;
     public float groundFriction = 1.0f;
     public GameObject attackObject;
 }

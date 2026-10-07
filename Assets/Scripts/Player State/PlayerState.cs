@@ -26,22 +26,12 @@ public abstract class PlayerState
         this.cameraObject = cameraObject;
     }
 
-    public abstract void OnStateChange();
+    public abstract void OnStateEnter();
 
-    public virtual void Moving(Vector2 moveVal)
-    {
-        Vector3 input = new Vector3(moveVal.x, 0, moveVal.y);
-        rigidBody.AddForce(playerObject.transform.rotation * input * attributes.moveSpeed, ForceMode.VelocityChange);
-    }
-    public virtual void Looking(Vector2 lookVal)
-    {
-        // TODO: DO NOT let player exceed top and bottom
-        // Keep the euler angle between 90 and 270 degrees
-        float rotationYAmount = lookVal.x * attributes.lookSpeed * Time.deltaTime;
-        float rotationXAmount = -1 * lookVal.y * attributes.lookSpeed * Time.deltaTime;
-        playerObject.transform.localEulerAngles += new Vector3(0, rotationYAmount, 0);
-        cameraObject.transform.localEulerAngles += new Vector3(rotationXAmount, 0, 0);
-    }
+    public abstract void OnStateExit();
+
+    public abstract void Moving(Vector2 moveVal);
+    public abstract void Looking(Vector2 lookVal);
 
     public void HandleInput(Inputs input)
     {
@@ -68,12 +58,26 @@ public abstract class PlayerState
         }
     }
 
-    public virtual void HandleLungeInput()
+    public abstract void HandleLungeInput();
+    public abstract void HandleAttackInput();
+    public abstract void HandleCrouchInput();
+    public abstract void HandleUncrouchInput();
+    public abstract void HandleDashInput();
+    public abstract void HandleJumpInput();
+
+    protected void Jump()
+    {
+        rigidBody.linearVelocity =
+            new Vector3(rigidBody.linearVelocity.x, attributes.jumpStrength, rigidBody.linearVelocity.z);
+    }
+
+    protected void Lunge()
     {
         rigidBody.linearVelocity = cameraObject.transform.forward * attributes.lungeForce +
                                    cameraObject.transform.up * attributes.lungeForce / 2;
     }
-    public virtual void HandleAttackInput()
+
+    protected void Attack()
     {
         AttackController attackController =
             Object
@@ -81,30 +85,6 @@ public abstract class PlayerState
                              cameraObject.transform.position + cameraObject.transform.forward * attributes.attackDist,
                              cameraObject.transform.rotation, cameraObject.transform)
                 .GetComponent<AttackController>();
-    }
-
-    public virtual void OnAttack(GameObject punched)
-    {
-        if (punched != null)
-        {
-            Punchable punchable = punched.GetComponent<Punchable>();
-            punchable.SetupPunch(cameraObject.transform.forward);
-        }
-    }
-
-    public virtual void HandleCrouchInput()
-    {
-    }
-    public virtual void HandleUncrouchInput()
-    {
-    }
-    public virtual void HandleDashInput()
-    {
-    }
-    public virtual void HandleJumpInput()
-    {
-        rigidBody.linearVelocity =
-            new Vector3(rigidBody.linearVelocity.x, attributes.jumpStrength, rigidBody.linearVelocity.z);
     }
 
     protected bool IsGrounded()

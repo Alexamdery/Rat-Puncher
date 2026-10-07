@@ -30,7 +30,8 @@ public class PlayerManager : MonoBehaviour
         _playerStates = new Dictionary<PlayerStateIndex, PlayerState> {
             { PlayerStateIndex.Grounded, new PlayerStateGrounded(attributes, this) },
             { PlayerStateIndex.Air, new PlayerStateAir(attributes, this) },
-            { PlayerStateIndex.Punching, new PlayerStatePunching(attributes, this) }
+            { PlayerStateIndex.Punching, new PlayerStatePunching(attributes, this) },
+            { PlayerStateIndex.Crouching, new PlayerStateCrouching(attributes, this) }
         };
         _currentState = _playerStates[PlayerStateIndex.Grounded];
     }
@@ -81,7 +82,8 @@ public class PlayerManager : MonoBehaviour
     }
     public void SetState(PlayerStateIndex stateIndex)
     {
+        _currentState.OnStateExit();
         _currentState = _playerStates[stateIndex];
-        _currentState.OnStateChange();
+        _currentState.OnStateEnter();
     }
 }
