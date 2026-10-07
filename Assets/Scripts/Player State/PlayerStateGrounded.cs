@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class PlayerStateGrounded : PlayerState
 {
-    public PlayerStateGrounded(PlayerAttributes attributes, PlayerController playerController)
+    public PlayerStateGrounded(PlayerAttributes attributes, PlayerManager playerController)
         : base(attributes, playerController)
     {
     }
@@ -17,5 +17,6 @@ public class PlayerStateGrounded : PlayerState
         base.Moving(moveVal);
         Vector3 xzVelocity = Vector3.Scale(rigidBody.linearVelocity, new Vector3(1, 0, 1));
         rigidBody.AddForce(-xzVelocity * attributes.groundFriction);
+        canLunge = true;
     }
 }

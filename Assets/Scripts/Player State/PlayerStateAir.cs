@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class PlayerStateAir : PlayerState
 {
-    public PlayerStateAir(PlayerAttributes attributes, PlayerController playerController)
+    public PlayerStateAir(PlayerAttributes attributes, PlayerManager playerController)
         : base(attributes, playerController)
     {
     }
@@ -24,6 +24,11 @@ public class PlayerStateAir : PlayerState
         }
     }
 
+    public override void HandleLungeInput()
+    {
+        base.HandleLungeInput();
+        canLunge = false;
+    }
     public override void HandleJumpInput()
     {
         return;

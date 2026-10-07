@@ -3,12 +3,13 @@ using UnityEngine;
 public abstract class PlayerState
 {
     protected PlayerAttributes attributes;
-    protected PlayerController playerController;
+    protected PlayerManager playerController;
     protected GameObject playerObject;
     protected GameObject cameraObject;
     protected Rigidbody rigidBody;
     protected CapsuleCollider collider;
-    public PlayerState(PlayerAttributes attributes, PlayerController playerController)
+    protected bool canLunge = true;
+    public PlayerState(PlayerAttributes attributes, PlayerManager playerController)
     {
         this.attributes = attributes;
         this.playerController = playerController;
@@ -67,8 +68,11 @@ public abstract class PlayerState
 
     public virtual void HandleLungeInput()
     {
-        rigidBody.linearVelocity = cameraObject.transform.forward * attributes.lungeForce +
-                                   cameraObject.transform.up * attributes.lungeForce / 2;
+        if (canLunge)
+        {
+            rigidBody.linearVelocity = cameraObject.transform.forward * attributes.lungeForce +
+                                       cameraObject.transform.up * attributes.lungeForce / 2;
+        }
     }
     public virtual void HandleAttackInput()
     {
