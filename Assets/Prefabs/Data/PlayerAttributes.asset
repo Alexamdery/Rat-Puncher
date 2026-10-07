@@ -12,13 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b135e460334f00d42824b0fd9d669f3c, type: 3}
   m_Name: PlayerAttributes
   m_EditorClassIdentifier: Assembly-CSharp::PlayerAttributes
-  moveSpeed: 30
+  moveSpeed: 0.6
   lookSpeed: 4
   jumpStrength: 4
   crouchHeight: 0.6
   attackDist: 1
   lungeForce: 10
   airControl: 0.5
-  airControlThreshold: 10
-  groundFriction: 0.8
+  groundFriction: 2
   attackObject: {fileID: 5062466295166725771, guid: 892365a75bfa0ef468b0706bb447ebad, type: 3}
