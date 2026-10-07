@@ -2,7 +2,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerController : MonoBehaviour
+public class PlayerControllerOld : MonoBehaviour
 {
     public float moveSpeed = 4f;
     public float lookSpeed = 4f;
@@ -15,7 +15,6 @@ public class PlayerController : MonoBehaviour
     public float groundFriction = 1.0f;
     public GameObject attackObject;
     public Camera camera;
-    private CameraController m_cameraController;
     private InputAction m_move;
     private InputAction m_look;
     private InputAction m_jump;
@@ -48,7 +47,6 @@ public class PlayerController : MonoBehaviour
         m_attack = InputSystem.actions.FindAction("Attack");
         m_rigidBody = GetComponent<Rigidbody>();
         m_collider = GetComponent<CapsuleCollider>();
-        m_cameraController = camera.GetComponent<CameraController>();
 
         float centerHeight = m_collider.height / 2;
         m_colliderCrouchDist = (1 - crouchHeight) * centerHeight;
@@ -82,10 +80,10 @@ public class PlayerController : MonoBehaviour
             Dash();
         }
 
-        if (m_crouch.WasPressedThisFrame() || m_crouch.WasReleasedThisFrame())
-        {
-            ToggleCrouch();
-        }
+        //if (m_crouch.WasPressedThisFrame() || m_crouch.WasReleasedThisFrame())
+        //{
+        //    ToggleCrouch();
+        //}
     }
 
     private void FixedUpdate()
@@ -132,22 +130,22 @@ public class PlayerController : MonoBehaviour
     {
     }
 
-    private void ToggleCrouch()
-    {
-        if (m_isCrouching)
-        {
-            m_cameraController.MoveCameraY(m_cameraCrouchDist);
-            m_collider.center = new Vector3(0, 0, 0);
-            m_collider.height /= crouchHeight;
-        }
-        else
-        {
-            m_cameraController.MoveCameraY(-m_cameraCrouchDist);
-            m_collider.center -= new Vector3(0, m_colliderCrouchDist, 0);
-            m_collider.height *= crouchHeight;
-        }
-        m_isCrouching = !m_isCrouching;
-    }
+    //private void ToggleCrouch()
+    //{
+    //    if (m_isCrouching)
+    //    {
+    //        m_cameraController.MoveCameraY(m_cameraCrouchDist);
+    //        m_collider.center = new Vector3(0, 0, 0);
+    //        m_collider.height /= crouchHeight;
+    //    }
+    //    else
+    //    {
+    //        m_cameraController.MoveCameraY(-m_cameraCrouchDist);
+    //        m_collider.center -= new Vector3(0, m_colliderCrouchDist, 0);
+    //        m_collider.height *= crouchHeight;
+    //    }
+    //    m_isCrouching = !m_isCrouching;
+    //}
     private void Attack()
     {
         m_hasAttacked = true;

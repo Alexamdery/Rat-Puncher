@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b135e460334f00d42824b0fd9d669f3c, type: 3}
+  m_Name: PlayerAttributes
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerAttributes
+  moveSpeed: 30
+  lookSpeed: 4
+  jumpStrength: 4
+  crouchHeight: 0.6
+  attackDist: 1
+  lungeForce: 10
+  airControl: 0.5
+  airControlThreshold: 10
+  groundFriction: 0.8
+  attackObject: {fileID: 5062466295166725771, guid: 892365a75bfa0ef468b0706bb447ebad, type: 3}
