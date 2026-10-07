@@ -1072,7 +1072,6 @@ GameObject:
   - component: {fileID: 1133023180}
   - component: {fileID: 1133023179}
   - component: {fileID: 1133023183}
-  - component: {fileID: 1133023184}
   m_Layer: 3
   m_Name: Player
   m_TagString: Untagged
@@ -1203,29 +1202,38 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 0
---- !u!114 &1133023184
-MonoBehaviour:
+--- !u!1 &1237632133
+GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1133023178}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ec4043082902f074ab4be1c1ddd045e9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerController
-  moveSpeed: 60
-  lookSpeed: 4
-  jumpStrength: 5
-  crouchHeight: 0.6
-  attackDist: 1
-  lungeForce: 10
-  airControl: 0.5
-  airControlThreshold: 10
-  groundFriction: 6.44
-  attackObject: {fileID: 5062466295166725771, guid: 892365a75bfa0ef468b0706bb447ebad, type: 3}
-  camera: {fileID: 625094238}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1237632134}
+  m_Layer: 0
+  m_Name: Managers
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1237632134
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1237632133}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -3.08706, y: 0, z: -4.79171}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1512152196}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1340004787
 GameObject:
   m_ObjectHideFlags: 0
@@ -1484,6 +1492,53 @@ Transform:
   m_Children: []
   m_Father: {fileID: 66281563}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1512152195
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1512152196}
+  - component: {fileID: 1512152197}
+  m_Layer: 0
+  m_Name: PlayerController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1512152196
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1512152195}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1237632134}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1512152197
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1512152195}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bfacdf2066ad4d649b8816e6f6e9b5d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerController
+  attributes: {fileID: 11400000, guid: aa16cb6c528c114418db3c4cdd688d80, type: 2}
+  playerObject: {fileID: 1133023178}
+  cameraObject: {fileID: 625094234}
 --- !u!1 &1524324103
 GameObject:
   m_ObjectHideFlags: 0
@@ -1943,3 +1998,4 @@ SceneRoots:
   - {fileID: 1133023182}
   - {fileID: 66281563}
   - {fileID: 1340004788}
+  - {fileID: 1237632134}

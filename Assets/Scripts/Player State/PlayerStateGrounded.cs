@@ -1,0 +1,27 @@
+using UnityEngine;
+
+public class PlayerStateGrounded : PlayerStateNeutral
+{
+    public PlayerStateGrounded(PlayerAttributes attributes, PlayerManager playerController)
+        : base(attributes, playerController)
+    {
+    }
+
+    public override void Moving(Vector2 moveVal)
+    {
+        if (!IsGrounded())
+        {
+            playerManager.SetState(PlayerStateIndex.Air);
+        }
+
+        base.Moving(moveVal);
+        Vector3 xzVelocity = Vector3.Scale(rigidBody.linearVelocity, new Vector3(1, 0, 1));
+        rigidBody.AddForce(-xzVelocity * attributes.groundFriction);
+    }
+
+    public override void HandleCrouchInput()
+    {
+        base.HandleCrouchInput();
+        playerManager.SetState(PlayerStateIndex.Crouching);
+    }
+}

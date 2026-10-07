@@ -1,16 +1,15 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class AttackController : MonoBehaviour
+public class Punch : MonoBehaviour
 {
     public float attackDuration;
-    public UnityEvent<GameObject> doneEvent;
+    public PlayerManager playerManager;
     private float m_timer = 0;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        if (doneEvent == null)
-            doneEvent = new UnityEvent<GameObject>();
     }
 
     // Update is called once per frame
@@ -19,7 +18,6 @@ public class AttackController : MonoBehaviour
         m_timer += Time.deltaTime;
         if (m_timer >= attackDuration)
         {
-            doneEvent.Invoke(null);
             Destroy(gameObject);
         }
     }
@@ -27,7 +25,7 @@ public class AttackController : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         // Should only be able to punch PUNCHABLE layer
-        doneEvent.Invoke(other.gameObject);
+        playerManager.SetPunching(other.gameObject);
         Destroy(gameObject);
     }
 }
