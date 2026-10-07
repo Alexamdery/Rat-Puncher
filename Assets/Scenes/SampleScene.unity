@@ -449,7 +449,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Enemy
   hp: 1
   maxReflections: 5
-  punchForce: 20
+  punchForce: 100
 --- !u!135 &518377027
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -586,7 +586,7 @@ LineRenderer:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 1
+        value: 0.14792728
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -1503,7 +1503,7 @@ GameObject:
   - component: {fileID: 1512152196}
   - component: {fileID: 1512152197}
   m_Layer: 0
-  m_Name: PlayerController
+  m_Name: PlayerManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1533,12 +1533,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 1512152195}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bfacdf2066ad4d649b8816e6f6e9b5d4, type: 3}
+  m_Script: {fileID: 11500000, guid: 92282d1bea413ab469c4fa29f763b00a, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerController
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerManager
   attributes: {fileID: 11400000, guid: aa16cb6c528c114418db3c4cdd688d80, type: 2}
   playerObject: {fileID: 1133023178}
   cameraObject: {fileID: 625094234}
+  punchedObject: {fileID: 0}
+  hasLunged: 0
 --- !u!1 &1524324103
 GameObject:
   m_ObjectHideFlags: 0

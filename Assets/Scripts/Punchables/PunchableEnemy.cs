@@ -8,12 +8,12 @@ public class Enemy : MonoBehaviour, Punchable
 {
     public int hp;
     public int maxReflections;
-    public float punchForce;
-    private bool m_isPunched;
-    private Vector3 m_punchAngle;
-    private int m_reflections;
-    private List<Vector3> m_rayPositions;
-    private LineRenderer m_lineRenderer;
+    public float punchForce = 1000f;
+    private bool _isPunched;
+    private Vector3 _punchAngle;
+    private int _reflections;
+    private Queue<Vector3> _rayPositions;
+    private LineRenderer _lineRenderer;
     public void Hook()
     {
         throw new System.NotImplementedException();
@@ -21,19 +21,20 @@ public class Enemy : MonoBehaviour, Punchable
 
     public void SetupPunch(Vector3 angle)
     {
-        m_punchAngle = angle;
-        m_isPunched = true;
+        _punchAngle = angle;
+        _isPunched = true;
     }
 
     public void Punch()
     {
-        throw new System.NotImplementedException();
+        // TODO: trace line?
+        Rigidbody rigidBody = gameObject.AddComponent<Rigidbody>();
+        rigidBody.AddForce(_punchAngle * punchForce, ForceMode.Impulse);
     }
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        m_lineRenderer = GetComponent<LineRenderer>();
+        _lineRenderer = GetComponent<LineRenderer>();
     }
 
     // Update is called once per frame
@@ -43,31 +44,31 @@ public class Enemy : MonoBehaviour, Punchable
 
     void FixedUpdate()
     {
-        if (m_isPunched)
+        if (_isPunched)
         {
             DrawRay();
-            m_isPunched = false;
+            _isPunched = false;
         }
     }
 
     private void DrawRay()
     {
-        m_rayPositions = new List<Vector3>();
-        m_reflections = 0;
-        GetRayPositions(transform.position, m_punchAngle);
-        m_lineRenderer.positionCount = m_rayPositions.Count;
-        m_lineRenderer.SetPositions(m_rayPositions.ToArray());
+        _rayPositions = new Queue<Vector3>();
+        _reflections = 0;
+        GetRayPositions(transform.position, _punchAngle);
+        _lineRenderer.positionCount = _rayPositions.Count;
+        _lineRenderer.SetPositions(_rayPositions.ToArray());
     }
 
     private void GetRayPositions(Vector3 start, Vector3 angle)
     {
-        m_rayPositions.Add(start);
+        _rayPositions.Enqueue(start);
         RaycastHit hit;
         if (Physics.Raycast(start, angle, out hit))
         {
-            if (hit.collider && m_reflections < maxReflections)
+            if (hit.collider && _reflections < maxReflections)
             {
-                m_reflections++;
+                _reflections++;
                 Vector3 reflectedAngle = Vector3.Reflect(angle, hit.normal);
                 GetRayPositions(hit.point, reflectedAngle);
             }
